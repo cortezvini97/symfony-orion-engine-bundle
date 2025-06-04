@@ -1,0 +1,36 @@
+parameters:
+    orion_engine_symfony.config:
+        dir_views: '%kernel.project_dir%/%symfony_orion.dir_views%'
+        cache_dir: '%kernel.project_dir%/var/cache/%env(resolve:APP_ENV)%/%symfony_orion.cache_dir%'
+        directives_dir: '%kernel.project_dir%/%symfony_orion.directives_dir%'
+        functions_dir: '%kernel.project_dir%/%symfony_orion.functions_dir%'
+        debug: '%symfony_orion.debug%'
+        deleteFile: '%symfony_orion.deleteFile%'
+        encore: '%kernel.project_dir%/%symfony_orion.encore%'
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    Orion\OrionEngine\Command\MakeOrionFunction:
+        arguments:
+            $dir: '%kernel.project_dir%/%symfony_orion.functions_dir%'
+        tags:
+            - { name: 'console.command' }
+
+    Orion\OrionEngine\Command\MakeOrionFunctionFile:
+        arguments:
+            $dir: '%kernel.project_dir%/%symfony_orion.functions_dir%'
+        tags:
+            - { name: 'console.command' }
+
+    Orion\OrionEngine\Command\MakeOrionDirective:
+        arguments:
+            $file: '%kernel.project_dir%/%symfony_orion.directives_dir%/directives.php'
+        tags:
+            - { name: 'console.command' }
+
+    Orion\OrionEngine\Services\OrionEngineService:
+        arguments:
+            $configs: '%orion_engine_symfony.config%'
