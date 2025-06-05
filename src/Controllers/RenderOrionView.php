@@ -5,9 +5,17 @@ namespace Orion\OrionEngine\Controllers;
 use Orion\OrionEngine\Services\OrionEngineService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class RenderOrionView extends AbstractController{
     
+
+    private KernelInterface $kernel;
+
+    public function __construct(KernelInterface $kernel) {
+        $this->kernel = $kernel;
+    }
+
     public function view(string $view, $params = []):Response{
         $extension = pathinfo($view, PATHINFO_EXTENSION);
         if($extension === "twig" && $this->container->has("twig"))
@@ -106,6 +114,9 @@ abstract class RenderOrionView extends AbstractController{
         {
             $services["web_link.http_header_serializer"] = $this->container->get("web_link.http_header_serializer");
         }
+
+        
+        $services["kernel"] = $this->kernel;
 
         
         return $services;

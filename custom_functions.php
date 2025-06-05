@@ -38,6 +38,14 @@ function route(string $name, $params = []) {
 };
 
 function importMP($entrypointName, $type) {
+
+    $services = $GLOBALS['services'];
+    $kernel = $services['kernel'];
+
+    if(!isset($kernel->getBundles()["WebpackEncoreBundle"])){
+        throw new LogicException("Not found installed symfony/webpack-encore-bundle.");
+    }
+
     static $alreadyIncluded = [
         'css' => [],
         'js' => [],
