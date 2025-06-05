@@ -1,7 +1,14 @@
 <?php
 
 function renderTwig(string $file_twig, $params = []){
-    $twig = $GLOBALS['services']['twig'];
+
+    $services = $GLOBALS['services'];
+    if(!isset($services["twig"]))
+    {
+        throw new LogicException("Not found installed symfony/twig-bundle.");
+    }
+
+    $twig = $services['twig'];
     return $twig->render($file_twig, $params);
 }
 
@@ -10,7 +17,7 @@ function csrf_field(){
     $services = $GLOBALS['services'];
     if(!isset($services["security.csrf.token_manager"]))
     {
-        throw new LogicException("Not found installed Symfony/Security.");
+        throw new LogicException("Not found installed symfony/security-bundle.");
     }
     $security = $services['security.csrf.token_manager'];
     $token = $security->getToken('authenticate')->getValue();
