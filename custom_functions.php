@@ -1,20 +1,21 @@
 <?php
 
-use function PHPUnit\Framework\isNull;
-
 function renderTwig(string $file_twig, $params = []){
     $twig = $GLOBALS['services']['twig'];
     return $twig->render($file_twig, $params);
 }
 
-
-function load($name, $type) {
-    $twig = renderTwig('index.html.twig', [
-        "name"=>$name,
-        "type"=>$type
-    ]);
-    dd($twig);
-    return $twig;
+function route(string $name, $params = []) {
+    $services = $GLOBALS['services'];
+    $routes = $services["router"];
+    $route = "";
+    if(count($params) > 0)
+    {
+        $route = $routes->generate($name, $params);
+    }else {
+        $route = $routes->generate($name);
+    }
+    return $route;
 };
 
 function importMP($entrypointName, $type) {
