@@ -5,6 +5,18 @@ function renderTwig(string $file_twig, $params = []){
     return $twig->render($file_twig, $params);
 }
 
+
+function csrf_field(){
+    $services = $GLOBALS['services'];
+    if(!isset($services["security.csrf.token_manager"]))
+    {
+        throw new LogicException("Not found installed Symfony/Security.");
+    }
+    $security = $services['security.csrf.token_manager'];
+    $token = $security->getToken('authenticate')->getValue();
+    return '<input type="hidden" name="_csrf_token" value="'.$token.'">';
+}
+
 function route(string $name, $params = []) {
     $services = $GLOBALS['services'];
     $routes = $services["router"];
